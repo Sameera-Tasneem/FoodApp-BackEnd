@@ -1,0 +1,66 @@
+package com.clarivate.foodApp.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+public class Menu {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn
+    private User user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<FoodProduct> foodProducts;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<FoodProduct> getFoodProducts() {
+        return foodProducts;
+    }
+
+    public void setFoodProducts(List<FoodProduct> foodProducts) {
+        this.foodProducts = foodProducts;
+    }
+
+    public Menu(Long id, User user, List<FoodProduct> foodProducts) {
+        this.id = id;
+        this.user = user;
+        this.foodProducts = foodProducts;
+    }
+
+    public Menu() {
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + id +
+                ", user=" + user +
+                ", foodProducts=" + foodProducts +
+                '}';
+    }
+}

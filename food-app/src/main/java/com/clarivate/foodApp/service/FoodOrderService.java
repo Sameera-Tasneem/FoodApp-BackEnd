@@ -1,0 +1,50 @@
+package com.clarivate.foodApp.service;
+
+import com.clarivate.foodApp.model.FoodOrder;
+import com.clarivate.foodApp.model.FoodProduct;
+import com.clarivate.foodApp.repository.FoodOrderRepository;
+import com.clarivate.foodApp.repository.FoodProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class FoodOrderService {
+
+	@Autowired
+	FoodOrderRepository foodOrderRepository;
+
+	@Autowired
+	FoodProductRepository foodProductRepository;
+
+	public String saveFoodOrder(FoodOrder foodOrder) {
+		foodOrderRepository.save(foodOrder);
+		return foodOrder.toString();
+	}
+
+	public void updateFoodOrder(Long foodProductId, Long foodOrderId, Integer quantity) {
+
+		FoodProduct oldFoodProduct = foodProductRepository.findById(foodProductId).orElse(null);
+		FoodOrder oldFoodOrder = foodOrderRepository.findById(foodOrderId).orElse(null);
+		Double totalAmount = quantity * oldFoodProduct.getPrice();
+		oldFoodOrder.setTotalPrice(totalAmount);
+		foodOrderRepository.save(oldFoodOrder);
+
+	}
+
+	public List<FoodOrder> getAllFoodOrder() {
+
+		return foodOrderRepository.findAll();
+	}
+
+	public void updateItem(Long id, FoodOrder foodOrder) {
+
+		foodOrder.setId(id);
+		foodOrderRepository.save(foodOrder);
+	}
+
+	public void deleteFoodOrder(Long id) {
+		foodOrderRepository.deleteById(id);
+	}
+}
